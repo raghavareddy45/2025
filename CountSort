@@ -1,0 +1,45 @@
+import java.util.Arrays;
+
+public class Main {
+    void applyCountSort(int[] array) {
+        int size = array.length;
+        if (size == 0) return;
+
+        // Find maximum value in the input array
+        int max = Arrays.stream(array).max().getAsInt();
+
+        // Create count array and initialize it
+        int[] count = new int[max + 1];
+        Arrays.fill(count, 0);
+
+        // Count occurrences of each number
+        for (int num : array) {
+            count[num]++;
+        }
+
+        // Update count[i] to contain actual position of this number in output
+        for (int i = 1; i <= max; i++) {
+            count[i] += count[i - 1];
+        }
+
+        // Output array to hold sorted numbers
+        int[] output = new int[size];
+
+        // Build output array
+        for (int i = size - 1; i >= 0; i--) {
+            output[count[array[i]] - 1] = array[i];
+            count[array[i]]--;
+        }
+
+        // Copy sorted elements back to original array
+        System.arraycopy(output, 0, array, 0, size);
+    }
+
+    public static void main(String[] args) {
+        int[] data = {2, 5, 2, 8, 1, 4, 1};
+       Main obj = new Main();
+        obj.applyCountSort(data);
+        
+        System.out.println("Array After Sorting: " + Arrays.toString(data));
+    }
+}
